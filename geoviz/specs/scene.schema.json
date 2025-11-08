@@ -1,0 +1,333 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://geometry-visualizer.io/schemas/scene.schema.json",
+  "title": "Geometry Visualizer Scene Schema",
+  "description": "JSON schema for geometry visualization scenes",
+  "type": "object",
+  "required": ["metadata", "objects"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "Scene metadata and versioning information",
+      "required": ["version"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Schema version",
+          "pattern": "^\\d+\\.\\d+$"
+        },
+        "units": {
+          "type": "string",
+          "description": "Units of measurement",
+          "enum": ["m", "cm", "mm", "in", "ft", "unitless"],
+          "default": "m"
+        },
+        "coordinate_system": {
+          "type": "string",
+          "description": "Coordinate system identifier",
+          "default": "cartesian"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of scene creation"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source application or script"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable scene description"
+        }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "description": "Camera configuration",
+      "properties": {
+        "position": {
+          "type": "array",
+          "description": "Camera position [x, y, z]",
+          "items": {"type": "number"},
+          "minItems": 3,
+          "maxItems": 3,
+          "default": [0, 0, 10]
+        },
+        "target": {
+          "type": "array",
+          "description": "Look-at target [x, y, z]",
+          "items": {"type": "number"},
+          "minItems": 3,
+          "maxItems": 3,
+          "default": [0, 0, 0]
+        },
+        "up": {
+          "type": "array",
+          "description": "Up vector [x, y, z]",
+          "items": {"type": "number"},
+          "minItems": 3,
+          "maxItems": 3,
+          "default": [0, 1, 0]
+        },
+        "projection": {
+          "type": "string",
+          "enum": ["perspective", "orthographic"],
+          "default": "perspective"
+        },
+        "fov": {
+          "type": "number",
+          "description": "Field of view in degrees (perspective)",
+          "minimum": 1,
+          "maximum": 179,
+          "default": 50
+        },
+        "near": {
+          "type": "number",
+          "description": "Near clipping plane",
+          "minimum": 0,
+          "default": 0.1
+        },
+        "far": {
+          "type": "number",
+          "description": "Far clipping plane",
+          "minimum": 0,
+          "default": 1000
+        },
+        "zoom": {
+          "type": "number",
+          "description": "Zoom factor (orthographic)",
+          "minimum": 0,
+          "default": 1
+        }
+      }
+    },
+    "renderOptions": {
+      "type": "object",
+      "description": "Rendering configuration",
+      "properties": {
+        "grid": {
+          "type": "boolean",
+          "description": "Show grid",
+          "default": true
+        },
+        "axes": {
+          "type": "boolean",
+          "description": "Show coordinate axes",
+          "default": true
+        },
+        "lighting": {
+          "type": "string",
+          "description": "Lighting preset",
+          "enum": ["default", "ambient", "studio", "night"],
+          "default": "default"
+        },
+        "background": {
+          "type": "string",
+          "description": "Background color (CSS color)",
+          "default": "#f0f0f0"
+        },
+        "antialias": {
+          "type": "boolean",
+          "description": "Enable antialiasing",
+          "default": true
+        },
+        "shadows": {
+          "type": "boolean",
+          "description": "Enable shadows",
+          "default": false
+        }
+      }
+    },
+    "objects": {
+      "type": "array",
+      "description": "Array of geometric objects in the scene",
+      "items": {
+        "$ref": "#/definitions/sceneObject"
+      }
+    },
+    "animations": {
+      "type": "array",
+      "description": "Optional animation instructions",
+      "items": {
+        "type": "object",
+        "properties": {
+          "objectId": {"type": "string"},
+          "property": {"type": "string"},
+          "keyframes": {"type": "array"},
+          "duration": {"type": "number"},
+          "easing": {"type": "string"}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "sceneObject": {
+      "type": "object",
+      "required": ["id", "type", "geometry"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique object identifier"
+        },
+        "type": {
+          "type": "string",
+          "description": "Geometry type",
+          "enum": [
+            "point2d", "point3d", "line2d", "segment2d", "segment3d",
+            "polygon2d", "mesh3d", "plane3d", "circle", "sphere",
+            "custom"
+          ]
+        },
+        "geometry": {
+          "description": "Geometry data (structure depends on type)",
+          "oneOf": [
+            {"$ref": "#/definitions/point2d"},
+            {"$ref": "#/definitions/point3d"},
+            {"$ref": "#/definitions/polygon2d"},
+            {"$ref": "#/definitions/mesh3d"},
+            {"type": "object"}
+          ]
+        },
+        "style": {
+          "type": "object",
+          "description": "Visual styling properties",
+          "properties": {
+            "color": {"type": "string"},
+            "stroke": {"type": "string"},
+            "strokeWidth": {"type": "number"},
+            "fill": {"type": "string"},
+            "opacity": {"type": "number", "minimum": 0, "maximum": 1},
+            "wireframe": {"type": "boolean"},
+            "pointSize": {"type": "number"}
+          }
+        },
+        "transform": {
+          "description": "Affine transformation matrix",
+          "oneOf": [
+            {"$ref": "#/definitions/transform2d"},
+            {"$ref": "#/definitions/transform3d"}
+          ]
+        },
+        "properties": {
+          "type": "object",
+          "description": "Custom properties",
+          "additionalProperties": true
+        },
+        "visible": {
+          "type": "boolean",
+          "description": "Visibility flag",
+          "default": true
+        }
+      }
+    },
+    "point2d": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": {
+        "x": {"type": "number"},
+        "y": {"type": "number"}
+      }
+    },
+    "point3d": {
+      "type": "object",
+      "required": ["x", "y", "z"],
+      "properties": {
+        "x": {"type": "number"},
+        "y": {"type": "number"},
+        "z": {"type": "number"}
+      }
+    },
+    "polygon2d": {
+      "type": "object",
+      "required": ["vertices"],
+      "properties": {
+        "vertices": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/point2d"},
+          "minItems": 3
+        },
+        "holes": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {"$ref": "#/definitions/point2d"},
+            "minItems": 3
+          }
+        }
+      }
+    },
+    "mesh3d": {
+      "type": "object",
+      "required": ["vertices", "faces"],
+      "properties": {
+        "vertices": {
+          "type": "array",
+          "description": "Vertex positions [[x,y,z], ...]",
+          "items": {
+            "type": "array",
+            "items": {"type": "number"},
+            "minItems": 3,
+            "maxItems": 3
+          }
+        },
+        "faces": {
+          "type": "array",
+          "description": "Triangle indices [[i,j,k], ...]",
+          "items": {
+            "type": "array",
+            "items": {"type": "integer", "minimum": 0},
+            "minItems": 3,
+            "maxItems": 3
+          }
+        },
+        "normals": {
+          "type": "array",
+          "description": "Optional vertex normals [[x,y,z], ...]",
+          "items": {
+            "type": "array",
+            "items": {"type": "number"},
+            "minItems": 3,
+            "maxItems": 3
+          }
+        }
+      }
+    },
+    "transform2d": {
+      "type": "object",
+      "required": ["matrix"],
+      "properties": {
+        "matrix": {
+          "type": "array",
+          "description": "3x3 transformation matrix (row-major)",
+          "items": {
+            "type": "array",
+            "items": {"type": "number"},
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      }
+    },
+    "transform3d": {
+      "type": "object",
+      "required": ["matrix"],
+      "properties": {
+        "matrix": {
+          "type": "array",
+          "description": "4x4 transformation matrix (row-major)",
+          "items": {
+            "type": "array",
+            "items": {"type": "number"},
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "minItems": 4,
+          "maxItems": 4
+        }
+      }
+    }
+  }
+}

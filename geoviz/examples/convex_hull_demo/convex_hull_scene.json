@@ -1,0 +1,376 @@
+{
+  "metadata": {
+    "units": "m",
+    "coordinate_system": "cartesian",
+    "timestamp": "2025-11-08T16:12:23.052195",
+    "source": "geometry-visualizer",
+    "version": "1.0",
+    "description": "Convex Hull Demonstration"
+  },
+  "camera": {
+    "position": [
+      0.0,
+      0.0,
+      10.0
+    ],
+    "target": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "up": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "projection": "perspective",
+    "fov": 50.0,
+    "near": 0.1,
+    "far": 1000.0,
+    "zoom": 1.0
+  },
+  "renderOptions": {
+    "grid": true,
+    "axes": true,
+    "lighting": "default",
+    "background": "#f0f0f0",
+    "antialias": true,
+    "shadows": false
+  },
+  "objects": [
+    {
+      "id": "point_0",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 2.7885359691576745,
+        "y": -9.49978489554666
+      }
+    },
+    {
+      "id": "point_1",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": -4.499413632617615,
+        "y": -5.5357852370235445
+      }
+    },
+    {
+      "id": "point_2",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 4.729424283280249,
+        "y": 3.533989748458225
+      }
+    },
+    {
+      "id": "point_3",
+      "type": "point2d",
+      "style": {
+        "color": "#3b82f6",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 7.843591354096908,
+        "y": -8.261223347411677
+      }
+    },
+    {
+      "id": "point_4",
+      "type": "point2d",
+      "style": {
+        "color": "#3b82f6",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": -1.561563606294591,
+        "y": -9.404055611238594
+      }
+    },
+    {
+      "id": "point_5",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": -5.627240503927933,
+        "y": 0.10710576206724731
+      }
+    },
+    {
+      "id": "point_6",
+      "type": "point2d",
+      "style": {
+        "color": "#3b82f6",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": -9.469280606322727,
+        "y": -6.02324698626703
+      }
+    },
+    {
+      "id": "point_7",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 2.997688755590463,
+        "y": 0.8988296120643327
+      }
+    },
+    {
+      "id": "point_8",
+      "type": "point2d",
+      "style": {
+        "color": "#3b82f6",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": -5.591187559186066,
+        "y": 1.7853136775181753
+      }
+    },
+    {
+      "id": "point_9",
+      "type": "point2d",
+      "style": {
+        "color": "#3b82f6",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 6.1886091335565325,
+        "y": -9.87002480643878
+      }
+    },
+    {
+      "id": "point_10",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 6.116385036656158,
+        "y": 3.962787899764537
+      }
+    },
+    {
+      "id": "point_11",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": -3.1949896696401625,
+        "y": -6.890410003764369
+      }
+    },
+    {
+      "id": "point_12",
+      "type": "point2d",
+      "style": {
+        "color": "#3b82f6",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 9.144261444135623,
+        "y": -3.2681090977474643
+      }
+    },
+    {
+      "id": "point_13",
+      "type": "point2d",
+      "style": {
+        "color": "#3b82f6",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": -8.145083132397042,
+        "y": -8.06567246333072
+      }
+    },
+    {
+      "id": "point_14",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 6.949887326949195,
+        "y": 2.0745206273378223
+      }
+    },
+    {
+      "id": "point_15",
+      "type": "point2d",
+      "style": {
+        "color": "#3b82f6",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 6.142565465487603,
+        "y": 4.594635733876357
+      }
+    },
+    {
+      "id": "point_16",
+      "type": "point2d",
+      "style": {
+        "color": "#3b82f6",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 0.7245618290940143,
+        "y": 9.462315279587411
+      }
+    },
+    {
+      "id": "point_17",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": -2.42931245583293,
+        "y": 1.0408126254645396
+      }
+    },
+    {
+      "id": "point_18",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 6.588093285059898,
+        "y": 2.370395047284921
+      }
+    },
+    {
+      "id": "point_19",
+      "type": "point2d",
+      "style": {
+        "color": "#9ca3af",
+        "pointSize": 0.2
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "x": 7.234138006215545,
+        "y": 1.5470429051352408
+      }
+    },
+    {
+      "id": "convex_hull",
+      "type": "polygon2d",
+      "style": {
+        "fill": "#3b82f6",
+        "stroke": "#1e40af",
+        "strokeWidth": 2,
+        "opacity": 0.3
+      },
+      "properties": {},
+      "visible": true,
+      "geometry": {
+        "vertices": [
+          {
+            "x": -9.469280606322727,
+            "y": -6.02324698626703
+          },
+          {
+            "x": -8.145083132397042,
+            "y": -8.06567246333072
+          },
+          {
+            "x": -1.561563606294591,
+            "y": -9.404055611238594
+          },
+          {
+            "x": 6.1886091335565325,
+            "y": -9.87002480643878
+          },
+          {
+            "x": 7.843591354096908,
+            "y": -8.261223347411677
+          },
+          {
+            "x": 9.144261444135623,
+            "y": -3.2681090977474643
+          },
+          {
+            "x": 6.142565465487603,
+            "y": 4.594635733876357
+          },
+          {
+            "x": 0.7245618290940143,
+            "y": 9.462315279587411
+          },
+          {
+            "x": -5.591187559186066,
+            "y": 1.7853136775181753
+          }
+        ],
+        "holes": []
+      }
+    }
+  ],
+  "animations": []
+}
