@@ -1,0 +1,382 @@
+Metadata-Version: 2.4
+Name: numeric-integrator
+Version: 0.1.0
+Summary: modular numerical integration and differential equation solver library
+Author: numeric integrator contributors
+License: MIT
+Keywords: numerical integration,ode solver,scientific computing,numerical methods
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: matplotlib>=3.7.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: scipy>=1.11.0; extra == "dev"
+Dynamic: license-file
+
+# Numeric Integrator
+
+A comprehensive Python library for numerical integration, differentiation, and ODE solving with classical and modern methods.
+
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Features
+
+### Numerical Integration
+- **Classical Methods**: Trapezoidal, Simpson's, Midpoint, Boole's rules
+- **Advanced Methods**: Romberg integration with Richardson extrapolation
+- **Adaptive Methods**: Adaptive trapezoidal and Simpson's with automatic mesh refinement
+- **Error Estimation**: Built-in error estimates for all methods
+
+### Numerical Differentiation
+- **Finite Differences**: Forward, backward, and central difference schemes
+- **Richardson Extrapolation**: Iterative refinement for high-accuracy derivatives
+- **Higher-Order Derivatives**: Second derivatives, gradient computation
+- **Optimal Step Size**: Automatic step size selection balancing truncation and roundoff errors
+
+### ODE Solvers
+- **Single-Step Methods**: Euler, Heun (RK2), Classical RK4
+- **Adaptive Methods**: Runge-Kutta-Fehlberg (RKF45) with automatic step control
+- **Multi-Step Methods**: Adams-Bashforth (explicit, orders 2-4), Adams-Moulton (implicit, orders 2-4)
+- **Stability Analysis**: Built-in stability region analysis for method selection
+
+### Analysis Tools
+- **Error Estimation**: Absolute and relative error computation
+- **Convergence Testing**: Automatic convergence rate determination
+- **Stability Analysis**: Amplification factor and stability region computation
+- **Adaptive Control**: PI controller for automatic step size adaptation
+
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/numeric-integrator.git
+cd numeric-integrator
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Install in development mode
+pip install -e .
+```
+
+## Quick Start
+
+### Integration
+
+```python
+from numeric_integrator import integrate
+import numpy as np
+
+# Simple integration
+result = integrate(lambda x: x**2, 0, 1, method='simpson', n=100)
+print(f"Integral: {result.value}")  # Output: 0.333333...
+
+# Adaptive integration with automatic refinement
+result = integrate(np.sin, 0, np.pi, method='adaptive_simpson', tol=1e-10)
+print(f"Integral: {result.value}, Error estimate: {result.error}")
+```
+
+### Differentiation
+
+```python
+from numeric_integrator import differentiate
+
+# Compute derivative
+f = lambda x: np.exp(x)
+result = differentiate(f, x0=1.0, method='central', h=0.001)
+print(f"f'(1) = {result.value}")  # Should be close to e ≈ 2.71828
+
+# Richardson extrapolation for high accuracy
+result = differentiate(f, x0=1.0, method='richardson', h=0.1, n=4)
+print(f"f'(1) = {result.value}, Evaluations: {result.n_evaluations}")
+```
+
+### ODE Solving
+
+```python
+from numeric_integrator import solve_ode
+
+# Solve dy/dx = y, y(0) = 1
+# Exact solution: y = e^x
+f = lambda x, y: y
+sol = solve_ode(f, y0=1.0, x0=0, x_end=2, method='rk4', step=0.1)
+
+print(f"Solution at x=2: {sol.y[-1]}")  # Should be close to e^2 ≈ 7.389
+print(f"Function evaluations: {sol.n_evaluations}")
+```
+
+### Van der Pol Oscillator Example
+
+```python
+import numpy as np
+from numeric_integrator import solve_ode
+
+def van_der_pol(t, y, mu=1.0):
+    """Van der Pol oscillator: d²y/dt² - μ(1-y²)dy/dt + y = 0"""
+    y1, y2 = y
+    return np.array([y2, mu * (1 - y1**2) * y2 - y1])
+
+# Solve with adaptive method
+y0 = np.array([2.0, 0.0])  # Initial position and velocity
+sol = solve_ode(
+    lambda t, y: van_der_pol(t, y, mu=2.0),
+    y0=y0,
+    x0=0,
+    x_end=30,
+    method='rkf45',
+    tol=1e-6
+)
+
+print(f"Solved in {len(sol.x)} time steps")
+```
+
+## Mathematical Background
+
+### Integration Methods
+
+#### Trapezoidal Rule
+Approximates the integral using trapezoids:
+
+$$\int_a^b f(x)dx \approx \frac{h}{2}\left[f(x_0) + 2\sum_{i=1}^{n-1}f(x_i) + f(x_n)\right]$$
+
+**Error**: $O(h^2)$ where $h = \frac{b-a}{n}$
+
+#### Simpson's Rule
+Uses quadratic interpolation:
+
+$$\int_a^b f(x)dx \approx \frac{h}{3}\left[f(x_0) + 4\sum_{i=odd}f(x_i) + 2\sum_{i=even}f(x_i) + f(x_n)\right]$$
+
+**Error**: $O(h^4)$
+
+#### Romberg Integration
+Applies Richardson extrapolation to trapezoidal estimates:
+
+$$R_{k,m} = \frac{4^m R_{k,m-1} - R_{k-1,m-1}}{4^m - 1}$$
+
+**Error**: Can achieve $O(h^{2m})$ with $m$ extrapolations
+
+### Differentiation Methods
+
+#### Central Difference
+Most accurate finite difference formula:
+
+$$f'(x) \approx \frac{f(x+h) - f(x-h)}{2h}$$
+
+**Error**: $O(h^2)$
+
+#### Richardson Extrapolation
+Iteratively eliminates error terms:
+
+$$D_{n+1} = \frac{2^p D_n - D_{n-1}}{2^p - 1}$$
+
+where $p$ is the order of the method.
+
+### ODE Solvers
+
+#### Runge-Kutta 4th Order (RK4)
+The classical explicit method:
+
+$$\begin{align}
+k_1 &= f(x_n, y_n) \\
+k_2 &= f(x_n + \frac{h}{2}, y_n + \frac{h}{2}k_1) \\
+k_3 &= f(x_n + \frac{h}{2}, y_n + \frac{h}{2}k_2) \\
+k_4 &= f(x_n + h, y_n + hk_3) \\
+y_{n+1} &= y_n + \frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)
+\end{align}$$
+
+**Error per step**: $O(h^5)$, **Global error**: $O(h^4)$
+
+#### Runge-Kutta-Fehlberg (RKF45)
+Adaptive method using embedded 4th/5th order pair for error estimation:
+
+$$\text{error} \approx |y_5 - y_4|$$
+
+Step size adjusted to maintain error below tolerance.
+
+#### Adams-Bashforth (Explicit Multi-Step)
+Uses previous function values:
+
+$$y_{n+1} = y_n + h\sum_{i=0}^{k-1} \beta_i f_{n-i}$$
+
+**Advantage**: Only one function evaluation per step (after initialization)
+
+#### Adams-Moulton (Implicit Multi-Step)
+More stable than Adams-Bashforth:
+
+$$y_{n+1} = y_n + h\sum_{i=0}^{k-1} \beta_i f_{n+1-i}$$
+
+**Advantage**: Better stability, often used as corrector with AB predictor
+
+## API Reference
+
+### High-Level Functions
+
+#### `integrate(f, a, b, method='simpson', n=None, tol=None, **kwargs)`
+Compute definite integral of f from a to b.
+
+**Parameters:**
+- `f`: callable - Function to integrate
+- `a, b`: float - Integration bounds
+- `method`: str - Integration method ('trapezoidal', 'simpson', 'midpoint', 'boole', 'romberg', 'adaptive_trapezoidal', 'adaptive_simpson')
+- `n`: int - Number of intervals (for fixed methods)
+- `tol`: float - Tolerance (for adaptive methods)
+
+**Returns:** `IntegrationResult` with fields:
+- `value`: float - Integral value
+- `error`: float - Error estimate
+- `n_evaluations`: int - Function evaluations
+- `method`: str - Method used
+
+#### `differentiate(f, x0, method='central', h=None, n=2, **kwargs)`
+Compute derivative of f at x0.
+
+**Parameters:**
+- `f`: callable - Function to differentiate
+- `x0`: float - Point at which to compute derivative
+- `method`: str - Differentiation method ('forward', 'backward', 'central', 'richardson')
+- `h`: float - Step size (auto if None)
+- `n`: int - Richardson extrapolation order
+
+**Returns:** `DerivativeResult` with fields:
+- `value`: float - Derivative value
+- `error`: float - Error estimate
+- `n_evaluations`: int - Function evaluations
+- `method`: str - Method used
+
+#### `solve_ode(f, y0, x0, x_end, method='rk4', step=None, tol=None, **kwargs)`
+Solve ODE dy/dx = f(x, y) with initial condition y(x0) = y0.
+
+**Parameters:**
+- `f`: callable - Right-hand side function f(x, y)
+- `y0`: float or array - Initial condition
+- `x0, x_end`: float - Integration interval
+- `method`: str - ODE method ('euler', 'heun', 'rk4', 'rkf45', 'ab2', 'ab3', 'ab4', 'am2', 'am3', 'am4')
+- `step`: float - Step size (for fixed methods)
+- `tol`: float - Tolerance (for adaptive methods)
+
+**Returns:** `ODESolution` with fields:
+- `x`: ndarray - Grid points
+- `y`: ndarray - Solution values
+- `n_evaluations`: int - Function evaluations
+- `success`: bool - Whether solve succeeded
+- `message`: str - Status message
+
+## Examples
+
+See the `examples/` directory for complete demonstrations:
+
+- **`integration_demo.ipynb`**: Comprehensive integration examples with convergence plots
+- **`differentiation_demo.ipynb`**: Differentiation methods and optimal step size selection
+- **`ode_demo.ipynb`**: ODE solvers including Van der Pol oscillator
+- **`benchmark.py`**: Performance comparison with SciPy
+
+Run benchmarks:
+```bash
+cd examples
+python benchmark.py
+```
+
+## Testing
+
+The library includes comprehensive test coverage (>83%):
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage report
+pytest --cov=numeric_integrator --cov-report=html
+
+# Run specific test file
+pytest tests/test_integrators.py -v
+```
+
+Test suite includes:
+- 203 unit tests covering all methods
+- Edge case handling
+- Numerical accuracy verification
+- Convergence rate validation
+- Stability analysis tests
+
+## Performance
+
+Benchmark results on Apple M-series (typical):
+
+### Integration (n=1000 points)
+| Method | Time | Accuracy |
+|--------|------|----------|
+| Trapezoidal | ~100μs | O(h²) |
+| Simpson | ~120μs | O(h⁴) |
+| Romberg | ~200μs | O(h⁸) |
+| Adaptive Simpson | ~150μs | User-specified |
+| SciPy quad | ~50μs | Machine precision |
+
+### ODE Solving (100 steps)
+| Method | Time | Order |
+|--------|------|-------|
+| Euler | ~80μs | O(h) |
+| Heun | ~150μs | O(h²) |
+| RK4 | ~250μs | O(h⁴) |
+| RKF45 | ~300μs | O(h⁵) adaptive |
+
+## Limitations
+
+1. **Stiff ODEs**: Explicit methods (Euler, RK4) may require very small steps. Consider implicit methods or specialized stiff solvers.
+
+2. **Highly Oscillatory Functions**: Standard quadrature may require many points. Consider specialized methods (Filon, Levin).
+
+3. **Improper Integrals**: Library handles bounded integrals. For unbounded or singular integrands, apply appropriate transformations.
+
+4. **High Dimensions**: Methods designed for 1D problems. For multidimensional integration, consider Monte Carlo or sparse grid methods.
+
+## Contributing
+
+Contributions welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Add tests for new functionality
+4. Ensure tests pass (`pytest`)
+5. Commit changes (`git commit -m 'Add amazing feature'`)
+6. Push to branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+## References
+
+1. **Numerical Recipes** by Press, Teukolsky, Vetterling, Flannery (Cambridge University Press, 2007)
+
+2. **Numerical Analysis** by Burden, Faires, Burden (Cengage, 2015)
+
+3. **Solving Ordinary Differential Equations I & II** by Hairer, Nørsett, Wanner (Springer, 1993)
+
+4. **Adaptive quadrature** - Numerical methods literature
+
+5. **Richardson extrapolation** - Original paper by Richardson & Gaunt (1927)
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## Authors
+
+Created as a comprehensive educational and research tool for numerical methods.
+
+## Acknowledgments
+
+- SciPy team for reference implementations
+- Numerical analysis community for method development
+- Contributors and testers
+
+---
+
+**Note**: This is a pure Python implementation optimized for clarity and educational value. For production use with large-scale problems, consider SciPy or specialized libraries with optimized C/Fortran backends.
