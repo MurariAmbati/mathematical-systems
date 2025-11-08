@@ -1,0 +1,141 @@
+Metadata-Version: 2.4
+Name: geometry-visualizer
+Version: 0.1.0
+Summary: A professional, modular, and extensible 2D/3D geometry engine and visualization platform
+Author: Geometry Visualizer Team
+License: MIT
+Project-URL: Homepage, https://github.com/yourusername/geometry-visualizer
+Project-URL: Documentation, https://github.com/yourusername/geometry-visualizer/docs
+Project-URL: Repository, https://github.com/yourusername/geometry-visualizer
+Project-URL: Issues, https://github.com/yourusername/geometry-visualizer/issues
+Keywords: geometry,visualization,3d,2d,computational-geometry
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: scipy>=1.10.0
+Requires-Dist: shapely>=2.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Dynamic: license-file
+
+# Geometry Visualizer
+
+A professional, modular, and extensible 2D/3D geometry engine and visualization platform for constructing, transforming, analyzing, and exporting geometric objects.
+
+## Features
+
+- **Geometric Primitives**: Point2D/3D, Vector2D/3D, Line2D, Segment2D/3D, Polygon2D, Mesh3D, Plane3D
+- **Transformations**: 2D and 3D affine transformations (translation, rotation, scaling, shearing)
+- **Algorithms**:
+  - Convex Hull (Monotone Chain and Graham Scan)
+  - Delaunay Triangulation (Bowyer-Watson)
+  - Voronoi Diagrams
+  - Polygon Boolean Operations (union, intersection, difference)
+- **Scene Management**: JSON-based scene format with schema validation
+- **I/O Support**: Import/export OBJ, STL, SVG, and JSON formats
+- **Type Safety**: Full type hints with mypy validation
+- **Immutable Design**: All primitives use frozen dataclasses
+
+## Installation
+
+### From PyPI (when published)
+
+```bash
+pip install geometry-visualizer
+```
+
+### From Source
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/geometry-visualizer.git
+cd geometry-visualizer/backend
+
+# Install in editable mode
+pip install -e .
+
+# Or install with development dependencies
+pip install -e ".[dev]"
+```
+
+## Quick Start
+
+```python
+from geometry_visualizer.primitives import Point2D, Point3D, Polygon2D, Mesh3D
+from geometry_visualizer.transforms import Transform2D, Transform3D
+from geometry_visualizer.algorithms.convex_hull import convex_hull_2d
+from geometry_visualizer.scene import Scene
+
+# Create 2D points
+points = [Point2D(0, 0), Point2D(1, 0), Point2D(0.5, 1), Point2D(0.5, 0.5)]
+
+# Compute convex hull
+hull = convex_hull_2d(points)
+print(f"Convex hull area: {hull.area()}")
+
+# Create a 3D mesh (cube)
+cube = Mesh3D(
+    vertices=[
+        Point3D(-1, -1, -1), Point3D(1, -1, -1),
+        Point3D(1, 1, -1), Point3D(-1, 1, -1),
+        Point3D(-1, -1, 1), Point3D(1, -1, 1),
+        Point3D(1, 1, 1), Point3D(-1, 1, 1),
+    ],
+    faces=[(0, 1, 2), (0, 2, 3), (4, 6, 5), (4, 7, 6),
+           (0, 4, 5), (0, 5, 1), (2, 6, 7), (2, 7, 3),
+           (0, 3, 7), (0, 7, 4), (1, 5, 6), (1, 6, 2)]
+)
+
+# Apply transformation
+transform = Transform3D.rotation_z(45) @ Transform3D.translation(2, 0, 0)
+transformed_cube = cube.transform(transform)
+
+# Create a scene
+scene = Scene()
+scene.add_object("cube1", "mesh3d", cube, style={"color": "#3b82f6"})
+
+# Export scene to JSON
+scene.export_json("my_scene.json")
+```
+
+## Development
+
+### Running Tests
+
+```bash
+pytest tests/ -v
+```
+
+### Type Checking
+
+```bash
+mypy geometry_visualizer
+```
+
+### Linting
+
+```bash
+ruff check geometry_visualizer
+ruff format geometry_visualizer
+```
+
+## Documentation
+
+See the [full documentation](../../docs/api.md) for detailed API reference and examples.
+
+## License
+
+MIT License - See LICENSE file for details
