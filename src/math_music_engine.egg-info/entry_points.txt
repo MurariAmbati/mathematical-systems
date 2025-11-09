@@ -1,2 +1,0 @@
-[console_scripts]
-mathmusic = math_music_engine.interfaces.cli:main
