@@ -1,0 +1,185 @@
+Metadata-Version: 2.4
+Name: math-music-engine
+Version: 0.1.0
+Summary: A modular framework for generating music from mathematical functions
+Author: Music Math Engine Team
+License: MIT
+Keywords: music,mathematics,synthesis,generative
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Multimedia :: Sound/Audio :: Sound Synthesis
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.26.0
+Requires-Dist: scipy>=1.11.0
+Requires-Dist: sympy>=1.12
+Requires-Dist: soundfile>=0.12.0
+Requires-Dist: mido>=1.3.0
+Requires-Dist: matplotlib>=3.8.0
+Requires-Dist: plotly>=5.18.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: mypy>=1.7.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+
+# Math-Music-Engine
+
+A modular framework for generating and manipulating music directly from mathematical functions, sequences, and structures.
+
+## Features
+
+- **Function-to-Sound Mapping**: Convert continuous or discrete mathematical functions into audible signals or MIDI sequences
+- **Structural Composition**: Combine multiple mathematical functions into multi-voice musical structures
+- **Parameter Control**: Map function outputs to pitch, amplitude, time, and timbre
+- **Real-Time Synthesis**: Low-latency synthesis capabilities
+- **Export**: Generate WAV, MIDI, and JSON metadata for reproducibility
+
+## Installation
+
+```bash
+pip install -e .
+```
+
+For development:
+
+```bash
+pip install -e ".[dev]"
+```
+
+## Quick Start
+
+### Command Line
+
+```bash
+
+## Quick Start
+
+```bash
+# Install
+pip install -e .
+
+# Run a simple demo
+python examples/simple_demo.py
+
+# Or use the CLI
+mathmusic generate --generator fourier --duration 5 --output test.wav
+```
+
+See `examples/README.md` for more demonstrations.
+
+## Usage Examples
+
+### Generate from Mathematical Function
+
+```python
+import numpy as np
+from math_music_engine.core import Oscillator, WaveformType, OutputManager
+
+# Create a 440 Hz tone
+osc = Oscillator(sample_rate=44100)
+signal = osc.generate(WaveformType.SINE, 440.0, duration=2.0)
+
+# Export
+output = OutputManager()
+output.export_audio(signal, "tone.wav")
+```
+```
+
+### Python API
+
+```python
+### Use Built-in Generators
+
+```python
+from math_music_engine.generators import FourierSynth, ChaosModulator
+from math_music_engine.core import OutputManager
+
+# Fourier synthesis
+fourier = FourierSynth(harmonics=[1.0, 0.5, 0.25, 0.125])
+signal = fourier.generate(fundamental_freq=220.0, duration=5.0)
+
+# Chaotic modulation
+chaos = ChaosModulator()
+chaos_signal = chaos.generate('lorenz', duration=5.0)
+
+# Export
+output = OutputManager()
+output.export_audio(signal, "fourier.wav")
+output.export_audio(chaos_signal, "chaos.wav")
+```
+
+### More Examples
+
+Check the `examples/` directory:
+- `simple_demo.py` - Basic tone generation
+- `example_generators.py` - Using multiple generators
+- `advanced_demo.py` - Complex compositions with scale quantization
+
+Run any example:
+```bash
+python examples/simple_demo.py
+```
+
+## Mathematical Generators
+
+- **Fourier Synthesis**: Harmonic timbre shaping from Fourier series
+- **Fibonacci Rhythm**: Rhythmic subdivision based on Fibonacci ratios
+- **Chaos Modulator**: Dynamic modulation from chaotic systems (Logistic, Lorenz, Rössler, Hénon)
+- **Fractal Melody**: Self-similar melodic construction using L-systems and fractals
+- **Prime Sequence**: Scale and timing control from prime numbers
+- **Random Walk**: Stochastic pitch movement (Brownian, Lévy, Markov, Ornstein-Uhlenbeck)
+
+## Features
+
+✅ **Deterministic** - Reproducible results with seed support  
+✅ **Modular** - Clean architecture, easy to extend  
+✅ **Type-Safe** - Comprehensive type hints  
+✅ **Well-Tested** - Unit tests for all major modules  
+✅ **Documented** - Complete API reference and examples  
+✅ **Multiple Exports** - WAV, MIDI, JSON metadata  
+✅ **Visualization** - Waveforms, spectrograms, 3D plots  
+
+## Architecture
+
+```
+math-music-engine/
+├── src/math_music_engine/
+│   ├── parser/          # Mathematical expression parsing (SymPy)
+│   ├── core/            # Core engines (function, mapping, synthesis, composition)
+│   ├── generators/      # 6 mathematical generators
+│   ├── visualization/   # Waveform, spectrogram, 3D plotting
+│   └── interfaces/      # CLI interface
+├── tests/               # Comprehensive test suite
+├── docs/                # Full documentation
+└── examples/            # Working examples
+```
+
+## Requirements
+
+- Python ≥ 3.12
+- NumPy, SciPy, SymPy
+- soundfile (audio I/O)
+- Mido (MIDI I/O)
+- Matplotlib / Plotly (visualization)
+
+## Documentation
+
+See the `docs/` directory for:
+- Design specification
+- Mathematical reference
+- Mapping schemas
+- API reference
+
+## Testing
+
+```bash
+pytest
+```
+
+## License
+
+MIT License
