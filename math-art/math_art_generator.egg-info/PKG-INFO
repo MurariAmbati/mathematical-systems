@@ -1,0 +1,156 @@
+Metadata-Version: 2.4
+Name: math-art-generator
+Version: 0.1.0
+Summary: High-performance procedural art generation using mathematical equations
+Author: Math Art Team
+License-Expression: MIT
+Keywords: art,mathematics,procedural-generation,visualization
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: sympy>=1.12
+Requires-Dist: numba>=0.58.0
+Requires-Dist: matplotlib>=3.7.0
+Requires-Dist: Pillow>=10.0.0
+Requires-Dist: noise>=1.2.2
+Requires-Dist: moviepy>=1.0.3
+Requires-Dist: jsonschema>=4.17.0
+Requires-Dist: scipy>=1.11.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: black>=23.7.0; extra == "dev"
+Requires-Dist: ruff>=0.0.280; extra == "dev"
+Requires-Dist: mypy>=1.4.0; extra == "dev"
+
+# Math Art Generator
+
+A high-performance, extensible engine for procedural art generation using mathematical equations, functions, and parametric systems.
+
+## Features
+
+- **Equation-based Rendering**: Parse and visualize mathematical expressions
+- **Multiple Coordinate Systems**: Cartesian, polar, and parametric modes
+- **Parametric Art**: Spirographs, Lissajous curves, attractors, and more
+- **Stochastic Effects**: Perlin/Simplex noise integration
+- **Animation Support**: Time-based parameter evolution
+- **Multiple Export Formats**: PNG, SVG, MP4/GIF, JSON
+- **Deterministic**: Seeded generation for reproducibility
+
+## Installation
+
+```bash
+# Install dependencies
+pip install -e .
+
+# Install with development tools
+pip install -e ".[dev]"
+```
+
+## Quick Start
+
+### Generate a Spirograph
+
+```python
+from core.generators.spirograph import Spirograph
+from core.renderers.static_renderer import StaticRenderer
+
+# Create a spirograph pattern
+spiro = Spirograph(R=8, r=1, a=4, samples=5000)
+points = spiro.generate()
+
+# Render and save
+renderer = StaticRenderer(colormap="magma")
+renderer.render(points)
+renderer.save("output/spirograph.png")
+```
+
+### Custom Mathematical Expression
+
+```python
+from core.parser import parse_equation
+from core.generators.custom_equation import CustomEquation
+from core.renderers.static_renderer import StaticRenderer
+
+# Parse and evaluate custom equation
+expr = parse_equation("sin(x*y) + cos(x^2 - y^2)")
+gen = CustomEquation(expr, x_range=(-3, 3), y_range=(-3, 3))
+points = gen.generate()
+
+# Render
+renderer = StaticRenderer(width=1024, height=1024, colormap="viridis")
+renderer.render(points)
+renderer.save("output/custom.png")
+```
+
+### Animated Polar Pattern
+
+```python
+from core.generators.polar_patterns import PolarPattern
+from core.renderers.animation_renderer import AnimationRenderer
+
+# Create time-evolving polar pattern
+pattern = PolarPattern(expr="sin(5*theta + t)", samples=2000)
+anim = AnimationRenderer(pattern, frames=120, fps=30)
+anim.render_to_video("output/polar_art.mp4")
+```
+
+## Project Structure
+
+```
+math-art-generator/
+├── core/                   # Core engine
+│   ├── parser.py          # Expression parsing
+│   ├── evaluator.py       # Numeric evaluation
+│   ├── coordinates.py     # Coordinate transformations
+│   ├── generators/        # Art generators
+│   ├── renderers/         # Rendering engines
+│   ├── color_maps.py      # Color mapping
+│   ├── export.py          # Export utilities
+│   └── utils.py           # Helper functions
+├── tests/                 # Test suite
+├── examples/              # Example artworks
+└── docs/                  # Documentation
+```
+
+## Supported Generators
+
+- **Spirograph**: Hypotrochoid and epitrochoid curves
+- **Lissajous**: Parametric sinusoidal patterns
+- **Attractors**: Lorenz, Clifford, Ikeda, and other chaotic systems
+- **Polar Patterns**: r = f(θ) equation rendering
+- **Custom Equations**: User-defined mathematical expressions
+
+## Testing
+
+```bash
+# Run all tests with coverage
+pytest
+
+# Run specific test file
+pytest tests/test_parser.py
+
+# Run with verbose output
+pytest -v
+```
+
+## Documentation
+
+- [Architecture Guide](docs/architecture.md)
+- [Function Catalog](docs/function_catalog.md)
+- [API Reference](docs/api_reference.md)
+
+## Requirements
+
+- Python 3.11+
+- NumPy, SymPy, Numba
+- Matplotlib, Pillow
+- MoviePy (for animations)
+
+## License
+
+MIT
