@@ -111,7 +111,7 @@ mit
 
 open an issue on github or check the examples/
   year = {2025},
-  url = {https://github.com/yourusername/tensor-analysis-studio}
+  url = {https://github.com/murariambati/tensor-analysis-studio}
 ## questions
 
 open an issue on github or check the examples/
