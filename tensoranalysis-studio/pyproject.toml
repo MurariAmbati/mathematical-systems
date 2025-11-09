@@ -1,0 +1,138 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tensor-analysis-studio"
+version = "0.1.0"
+description = "A rigorous tensor algebra framework with symbolic and numeric capabilities"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Tensor Analysis Studio Contributors"}
+]
+keywords = [
+    "tensor",
+    "differential-geometry",
+    "general-relativity",
+    "einstein-notation",
+    "symbolic-math",
+    "numerical-computation"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Typing :: Typed"
+]
+
+dependencies = [
+    "numpy>=1.24.0",
+]
+
+[project.optional-dependencies]
+symbolic = [
+    "sympy>=1.12"
+]
+viz = [
+    "matplotlib>=3.7.0",
+    "plotly>=5.14.0"
+]
+jax = [
+    "jax>=0.4.0",
+    "jaxlib>=0.4.0"
+]
+cupy = [
+    "cupy>=12.0.0"
+]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "hypothesis>=6.82.0",
+    "mypy>=1.5.0",
+    "ruff>=0.0.280",
+    "black>=23.7.0"
+]
+all = [
+    "tensor-analysis-studio[symbolic,viz,jax,dev]"
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/tensor-analysis-studio"
+Documentation = "https://tensor-analysis-studio.readthedocs.io"
+Repository = "https://github.com/yourusername/tensor-analysis-studio"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tas*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--strict-markers --cov=tas --cov-report=html --cov-report=term-missing"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = "sympy.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "matplotlib.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "plotly.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "jax.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "cupy.*"
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.coverage.run]
+source = ["tas"]
+omit = ["*/tests/*", "*/test_*.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@overload"
+]

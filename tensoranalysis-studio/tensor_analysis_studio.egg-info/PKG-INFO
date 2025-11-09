@@ -1,0 +1,165 @@
+Metadata-Version: 2.4
+Name: tensor-analysis-studio
+Version: 0.1.0
+Summary: A rigorous tensor algebra framework with symbolic and numeric capabilities
+Author: Tensor Analysis Studio Contributors
+License: MIT
+Project-URL: Homepage, https://github.com/yourusername/tensor-analysis-studio
+Project-URL: Documentation, https://tensor-analysis-studio.readthedocs.io
+Project-URL: Repository, https://github.com/yourusername/tensor-analysis-studio
+Keywords: tensor,differential-geometry,general-relativity,einstein-notation,symbolic-math,numerical-computation
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Typing :: Typed
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.24.0
+Provides-Extra: symbolic
+Requires-Dist: sympy>=1.12; extra == "symbolic"
+Provides-Extra: viz
+Requires-Dist: matplotlib>=3.7.0; extra == "viz"
+Requires-Dist: plotly>=5.14.0; extra == "viz"
+Provides-Extra: jax
+Requires-Dist: jax>=0.4.0; extra == "jax"
+Requires-Dist: jaxlib>=0.4.0; extra == "jax"
+Provides-Extra: cupy
+Requires-Dist: cupy>=12.0.0; extra == "cupy"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: hypothesis>=6.82.0; extra == "dev"
+Requires-Dist: mypy>=1.5.0; extra == "dev"
+Requires-Dist: ruff>=0.0.280; extra == "dev"
+Requires-Dist: black>=23.7.0; extra == "dev"
+Provides-Extra: all
+Requires-Dist: tensor-analysis-studio[dev,jax,symbolic,viz]; extra == "all"
+Dynamic: license-file
+
+# Tensor Analysis Studio
+
+A rigorous, production-ready tensor algebra framework that unifies symbolic Einstein-notation manipulation and high-performance numeric evaluation, with first-class support for coordinate systems, metrics, covariant derivatives, index gymnastics (raise/lower), and visual tools to inspect tensor flows.
+
+## Features
+
+- **Einstein Notation**: Intuitive index notation for tensor operations with automatic contraction detection
+- **Index Management**: Explicit covariant/contravariant index tracking with automatic raise/lower operations
+- **Metric Tensors**: Full support for metrics, signatures, and index manipulation
+- **Differential Geometry**: Christoffel symbols, covariant derivatives, Lie derivatives
+- **Coordinate Systems**: Built-in Cartesian, spherical, cylindrical frames with transformation support
+- **Multiple Backends**: NumPy (default), JAX (for autodiff/JIT), CuPy (GPU acceleration)
+- **Symbolic Computation**: Optional SymPy integration for symbolic tensor algebra
+- **Visualization**: Tensor flow diagrams, field plots, and interactive inspectors
+- **Type Safety**: Full type annotations with mypy strict mode
+
+## Installation
+
+```bash
+# Basic installation (NumPy only)
+pip install tensor-analysis-studio
+
+# With symbolic support
+pip install tensor-analysis-studio[symbolic]
+
+# With visualization
+pip install tensor-analysis-studio[viz]
+
+# With JAX backend
+pip install tensor-analysis-studio[jax]
+
+# Full installation
+pip install tensor-analysis-studio[all]
+```
+
+## Quick Start
+
+```python
+import numpy as np
+from tas import Tensor, Index, Metric
+from tas.core.einsum_parser import einsum_eval
+
+# Create tensors with explicit indices
+A = Tensor(np.random.rand(3, 3), indices=("^i", "_j"))
+B = Tensor(np.random.rand(3, 3), indices=("^j", "_k"))
+
+# Einstein notation contraction
+C = einsum_eval("A^i_j B^j_k", A=A, B=B)
+
+# Define a metric
+g = Metric(np.eye(3), indices=("_i", "_j"))
+
+# Raise/lower indices
+A_raised = A.raise_index(metric=g, axis=1)
+
+# Covariant derivative
+from tas.core.connections import Connection
+from tas.core.diffops import covariant_derivative
+
+conn = Connection.from_metric(g)
+grad_A = covariant_derivative(A, conn)
+```
+
+## Use Cases
+
+- **General Relativity**: Compute Christoffel symbols, Riemann tensors, Einstein equations
+- **Continuum Mechanics**: Stress-energy tensors, elasticity, fluid dynamics
+- **Machine Learning**: Advanced tensor operations with index awareness
+- **Education**: Interactive visualizations of tensor operations and transformations
+
+## Documentation
+
+Full documentation is available at [tensor-analysis-studio.readthedocs.io](https://tensor-analysis-studio.readthedocs.io)
+
+## Development
+
+```bash
+# Clone repository
+git clone https://github.com/yourusername/tensor-analysis-studio.git
+cd tensor-analysis-studio
+
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Type checking
+mypy tas
+
+# Format code
+black tas tests
+ruff check tas tests
+```
+
+## Roadmap
+
+- **Phase 0 (MVP)**: Core Tensor, Index, Einstein parser, Metric, raise/lower ✓
+- **Phase 1**: Connection, covariant derivatives, symbolic integration
+- **Phase 2**: Rust backend for optimized contractions
+- **Phase 3**: Interactive visualization UI and web demos
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Contributing
+
+Contributions are welcome! Please read CONTRIBUTING.md for guidelines.
+
+## Citation
+
+If you use Tensor Analysis Studio in your research, please cite:
+
+```bibtex
+@software{tensor_analysis_studio,
+  title = {Tensor Analysis Studio},
+  author = {Tensor Analysis Studio Contributors},
+  year = {2025},
+  url = {https://github.com/yourusername/tensor-analysis-studio}
+}
+```
